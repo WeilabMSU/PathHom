@@ -5,7 +5,7 @@
     Create:
         2022-04-12
     Modify:
-        2022-06-30
+        2022-09-20
     Dependencies:
         python                    3.7.4
         numpy                     1.21.5
@@ -339,8 +339,15 @@ class PathHomology(object):
 
         all_betti_num = []
         save_time_flag = 0
+        snapshot_map_temp = np.ones([points_num]*2, dtype=int)
         for n, snapshot_dis in enumerate(filtration):
             snapshot_map = np.ones([points_num]*2, dtype=int) * (distance_matrix <= snapshot_dis) * fully_connected_map
+            if (snapshot_map == snapshot_map_temp).all():
+                betti_numbers = all_betti_num[-1]
+                all_betti_num.append(betti_numbers)
+                continue
+            else:
+                snapshot_map_temp = copy.deepcopy(snapshot_map)
 
             start_ids = []
             end_ids = []
@@ -405,8 +412,16 @@ class PathHomology(object):
 
         all_betti_num = []
         save_time_flag = 0
+        snapshot_map_temp = np.ones([points_num]*2, dtype=int)
         for n, snapshot_dis in enumerate(filtration):
             snapshot_map = np.ones([points_num]*2, dtype=int) * (distance_matrix <= snapshot_dis) * fully_connected_map
+            if (snapshot_map == snapshot_map_temp).all():
+                betti_numbers = all_betti_num[-1]
+                all_betti_num.append(betti_numbers)
+                continue
+            else:
+                snapshot_map_temp = copy.deepcopy(snapshot_map)
+
             start_ids = []
             end_ids = []
             for i in range(points_num):
@@ -514,6 +529,7 @@ class PathHomology(object):
         # persistent betti num
         all_betti_num = []
         edges = np.zeros([0, 2])
+        snapshot_map_idx_temp = np.array([])
         for n, snapshot_angle in enumerate(filtration):
             snapshot_map_idx = np.append(
                 np.where(two_related_angles[:, 0] < snapshot_angle[0])[0],
@@ -525,6 +541,13 @@ class PathHomology(object):
                     )
                 )
             )
+
+            if (np.sort(snapshot_map_idx) == snapshot_map_idx_temp).all():
+                all_betti_num.append(betti_numbers)
+                continue
+            else:
+                snapshot_map_idx_temp = copy.deepcopy(np.sort(snapshot_map_idx))
+
             edges_temp = all_edge_idx[snapshot_map_idx, :]
 
             # delete original set
@@ -610,6 +633,7 @@ class PathHomology(object):
         # persistent betti num
         all_betti_num = []
         edges = np.zeros([0, 2])
+        snapshot_map_idx_temp = np.array([])
         for n, snapshot_angle in enumerate(filtration):
             snapshot_map_idx = np.append(
                 np.where(two_related_angles[:, 0] < snapshot_angle[0])[0],
@@ -621,6 +645,13 @@ class PathHomology(object):
                     )
                 )
             )
+
+            if (np.sort(snapshot_map_idx) == snapshot_map_idx_temp).all():
+                all_betti_num.append(betti_numbers)
+                continue
+            else:
+                snapshot_map_idx_temp = copy.deepcopy(np.sort(snapshot_map_idx))
+
             edges_temp = all_edge_idx[snapshot_map_idx, :]
 
             # delete original set
