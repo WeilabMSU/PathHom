@@ -682,9 +682,9 @@ def input_cloudpoints(data_file, save_path, args):
             cloudpoints, points_weight, max_path)
         result = {
             'betti_num': betti_num_all,
-            'initial_vector_x': PH.initial_x_vector,
-            'initial_vector_y': PH.initial_y_vector,
-            'initial_vector_z': PH.initial_z_vector,
+            'initial_vector_x': PH.initial_vector_x,
+            'initial_vector_y': PH.initial_vector_y,
+            'initial_vector_z': PH.initial_vector_z,
             'edges_num': PH.total_edges_num,
         }
         np.save(save_path, result, allow_pickle=True)
@@ -716,9 +716,9 @@ def input_digraph(data_file, save_path, args):
             cloudpoints, all_edges, max_path)
         result = {
             'betti_num': betti_num_all,
-            'initial_vector_x': PH.initial_x_vector,
-            'initial_vector_y': PH.initial_y_vector,
-            'initial_vector_z': PH.initial_z_vector,
+            'initial_vector_x': PH.initial_vector_x,
+            'initial_vector_y': PH.initial_vector_y,
+            'initial_vector_z': PH.initial_vector_z,
             'edges_num': PH.total_edges_num,
         }
         np.save(save_path, result, allow_pickle=True)
