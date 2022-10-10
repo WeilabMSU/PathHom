@@ -529,7 +529,6 @@ class PathHomology(object):
         # persistent betti num
         all_betti_num = []
         edges = np.zeros([0, 2])
-        snapshot_map_idx_temp = np.array([])
         for n, snapshot_angle in enumerate(filtration):
             snapshot_map_idx = np.append(
                 np.where(two_related_angles[:, 0] < snapshot_angle[0])[0],
@@ -541,13 +540,6 @@ class PathHomology(object):
                     )
                 )
             )
-
-            if (np.sort(snapshot_map_idx) == snapshot_map_idx_temp).all():
-                all_betti_num.append(betti_numbers)
-                continue
-            else:
-                snapshot_map_idx_temp = copy.deepcopy(np.sort(snapshot_map_idx))
-
             edges_temp = all_edge_idx[snapshot_map_idx, :]
 
             # delete original set
@@ -555,6 +547,10 @@ class PathHomology(object):
             all_edge_idx = np.delete(all_edge_idx, snapshot_map_idx, axis=0)
             edges = np.vstack([edges, edges_temp])
 
+            if len(edges) > 0 and len(edges_temp) == 0:
+                betti_numbers = all_betti_num[-1]
+                all_betti_num.append(betti_numbers)
+                continue
             betti_numbers = self.path_homology(edges.astype(int), points_idx, max_path)
             all_betti_num.append(betti_numbers)
 
@@ -633,7 +629,6 @@ class PathHomology(object):
         # persistent betti num
         all_betti_num = []
         edges = np.zeros([0, 2])
-        snapshot_map_idx_temp = np.array([])
         for n, snapshot_angle in enumerate(filtration):
             snapshot_map_idx = np.append(
                 np.where(two_related_angles[:, 0] < snapshot_angle[0])[0],
@@ -646,18 +641,18 @@ class PathHomology(object):
                 )
             )
 
-            if (np.sort(snapshot_map_idx) == snapshot_map_idx_temp).all():
-                all_betti_num.append(betti_numbers)
-                continue
-            else:
-                snapshot_map_idx_temp = copy.deepcopy(np.sort(snapshot_map_idx))
-
             edges_temp = all_edge_idx[snapshot_map_idx, :]
 
             # delete original set
             two_related_angles = np.delete(two_related_angles, snapshot_map_idx, axis=0)
             all_edge_idx = np.delete(all_edge_idx, snapshot_map_idx, axis=0)
             edges = np.vstack([edges, edges_temp])
+
+            if len(edges) > 0 and len(edges_temp) == 0:
+                betti_numbers = all_betti_num[-1]
+                all_betti_num.append(betti_numbers)
+                continue
+            
             betti_numbers = self.path_homology(edges.astype(int), points_idx, max_path)
             all_betti_num.append(betti_numbers)
 
