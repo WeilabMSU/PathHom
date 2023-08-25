@@ -679,7 +679,7 @@ def input_cloudpoints(data_file, save_path, args):
     elif args.filtration_type == 'angle':
         PH = PathHomology()
         betti_num_all = PH.persistent_angle_path_homology(
-            cloudpoints, points_weight, max_path)
+            cloudpoints, points_weight, max_path, filtration_angle_step=args.angle_step)
         result = {
             'betti_num': betti_num_all,
             'initial_vector_x': PH.initial_vector_x,
@@ -713,7 +713,7 @@ def input_digraph(data_file, save_path, args):
     elif args.filtration_type == 'angle':
         PH = PathHomology()
         betti_num_all = PH.persistent_angle_path_homology_from_digraph(
-            cloudpoints, all_edges, max_path)
+            cloudpoints, all_edges, max_path, filtration_angle_step=args.angle_step)
         result = {
             'betti_num': betti_num_all,
             'initial_vector_x': PH.initial_vector_x,
@@ -747,6 +747,7 @@ def parse_args(args):
                         'The last two columns are start point idx and end point idx of the edges. All indices are start from 0')
     parser.add_argument('--filtration_type', default='angle', type=str, choices=['angle', 'distance'])
     parser.add_argument('--max_distance', default=5, type=float, help='if filtration_type is angle, it will be ignored')
+    parser.add_argument('--angle_step', default=30, type=int, help='Int, divisible by 180. if filtration_type is distance, it will be ignored')
     parser.add_argument('--save_name', default='./', type=str)
     parser.add_argument('--max_path', default=2, type=int)
     args = parser.parse_args()
